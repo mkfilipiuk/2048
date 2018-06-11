@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Blazor.Server;
+﻿using game2048.Data;
+using Microsoft.AspNetCore.Blazor.Server;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Net.Mime;
+using System.Configuration;
+
 
 namespace game2048.Server
 {
@@ -16,7 +20,8 @@ namespace game2048.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
+            services.AddDbContext<Context>(options =>
+            options.UseSqlServer(System.Configuration.GetConnectionString("DefaultConnection")));
             services.AddResponseCompression(options =>
             {
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
