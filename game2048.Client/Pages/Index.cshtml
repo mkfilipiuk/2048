@@ -1,0 +1,71 @@
+﻿@page "/"
+
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
+@using _2048.MVC.Model
+@using _2048.csfunctions_for_js
+
+<h1>2048</h1>
+<button id="initKeyLogger" onclick="initJS();">Run JS</button>
+<button id="initKeyLogger" onclick=@initKey_f>Start Game</button>
+
+
+<div id="grid">
+    @if (g.isFinished == false)
+    {
+        <div class="row" id="row0">
+            <div class="tile" id="tile00">@g.GetElement(0, 0)</div>
+            <div class="tile" id="tile01">@g.GetElement(0, 1)</div>
+            <div class="tile" id="tile02">@g.GetElement(0, 2)</div>
+            <div class="tile" id="tile03">@g.GetElement(0, 3)</div>
+        </div>
+        <div class="row" id="row1">
+            <div class="tile" id="tile10">@g.GetElement(1, 0)</div>
+            <div class="tile" id="tile11">@g.GetElement(1, 1)</div>
+            <div class="tile" id="tile12">@g.GetElement(1, 2)</div>
+            <div class="tile" id="tile13">@g.GetElement(1, 3)</div>
+        </div>
+        <div class="row" id="row2">
+            <div class="tile" id="tile20">@g.GetElement(2, 0)</div>
+            <div class="tile" id="tile21">@g.GetElement(2, 1)</div>
+            <div class="tile" id="tile22">@g.GetElement(2, 2)</div>
+            <div class="tile" id="tile23">@g.GetElement(2, 3)</div>
+        </div>
+        <div class="row" id="row3">
+            <div class="tile" id="tile30">@g.GetElement(3, 0)</div>
+            <div class="tile" id="tile31">@g.GetElement(3, 1)</div>
+            <div class="tile" id="tile32">@g.GetElement(3, 2)</div>
+            <div class="tile" id="tile33">@g.GetElement(3, 3)</div>
+        </div>
+    }
+    else
+    {
+        <p>Gra się skończyła</p>
+    }
+</div>
+
+
+@functions {
+
+Grid g;
+
+protected override void OnInit()
+{
+    InitPage();
+}
+
+private void InitPage()
+{
+    g = new Grid();
+    g.InitGame();
+    ArrowsHandler.grid = g;
+    ArrowsHandler.action = StateHasChanged;
+}
+
+
+private void initKey_f()
+{
+    RegisteredFunction.Invoke<bool>("initkey");
+}
+
+
+} 

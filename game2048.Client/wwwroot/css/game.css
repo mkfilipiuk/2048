@@ -1,0 +1,29 @@
+﻿.tile {
+    width: 100px;
+    height: 100px;
+    background-color: cornflowerblue;
+    margin: 12.5px;
+    text-align: center;
+    display: inline-block;
+    line-height: 100px;
+    font-family: 'Comic Sans MS';
+    font-size: 80px;
+}
+
+span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+#grid {
+    width: 500px;
+    height: 500px;
+    background-color: limegreen;
+}
+
+.row {
+    width: 500px;
+    height: 125px;
+    margin: 0px;
+}

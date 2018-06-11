@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <title>2048</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="css/game.css" rel="stylesheet" />
+</head>
+<body>
+    <app>Loading...</app>
+
+    <script type="blazor-boot">
+    </script>
+    <script supress-error="BL9992">
+        initJS = function () {
+            const assemblyName = 'game2048.Client';
+            const namespace = '_2048.csfunctions_for_js';
+            const typeName = 'ArrowsHandler';
+            const methodName = 'DealArrow';
+
+            DealArrow = Blazor.platform.findMethod(
+                assemblyName,
+                namespace,
+                typeName,
+                methodName
+            );
+
+            initkey = function () {
+                document.onkeydown = function (e) {
+                    e = e || window.event;
+
+                    let arg1AsDotNetString = Blazor.platform.toDotNetString(String(e.keyCode));
+
+                    Blazor.platform.callMethod(DealArrow, null, [
+                        arg1AsDotNetString
+                    ]);
+                    console.log(e);
+                    return true;
+                };
+            };
+            Blazor.registerFunction('initkey', initkey);
+        }
+    </script>
+</body>
+</html>
