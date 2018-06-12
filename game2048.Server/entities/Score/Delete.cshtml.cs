@@ -20,7 +20,7 @@ namespace game2048.Server.entities.Score
         }
 
         [BindProperty]
-        public Score Score { get; set; }
+        public ScoreClass Score { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

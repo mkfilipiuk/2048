@@ -9,11 +9,11 @@ namespace game2048.Data
         {
         }
 
-        public DbSet<Score> Scores { get; set; }
+        public DbSet<ScoreClass> Scores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Score>().ToTable("Score");
+            modelBuilder.Entity<ScoreClass>().ToTable("Score");
         }
     }
 }

@@ -5,9 +5,10 @@
     margin: 12.5px;
     text-align: center;
     display: inline-block;
-    line-height: 100px;
+    line-height: 80px;
     font-family: 'Comic Sans MS';
-    font-size: 80px;
+    font-size: 30px;
+    max-height: 100px;
 }
 
 span {

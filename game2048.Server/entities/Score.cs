@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace game2048.Models
 {
-    public class Score
+    public class ScoreClass
     {
         public int ID { get; set; }
         public string Nickname { get; set; }

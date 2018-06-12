@@ -19,7 +19,7 @@ namespace game2048.Server.entities.Score
             _context = context;
         }
 
-        public IList<Score> Score { get;set; }
+        public IList<ScoreClass> Score { get;set; }
 
         public async Task OnGetAsync()
         {

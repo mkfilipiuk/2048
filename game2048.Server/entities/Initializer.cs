@@ -16,13 +16,13 @@ namespace game2048.Data
                 return;   // DB has been seeded
             }
 
-            var scores = new Score[]
+            var scores = new ScoreClass[]
             {
-            new Score{Nickname="Carson",Points=3542, TypeOfScorer="Human"},
-            new Score{Nickname="Benson",Points=1234, TypeOfScorer="AI"},
-            new Score{Nickname="Larson",Points=4312, TypeOfScorer="Human"},
+            new ScoreClass{Nickname="Carson",Points=3542, TypeOfScorer="Human"},
+            new ScoreClass{Nickname="Benson",Points=1234, TypeOfScorer="AI"},
+            new ScoreClass{Nickname="Larson",Points=4312, TypeOfScorer="Human"},
             };
-            foreach (Score s in scores)
+            foreach (ScoreClass s in scores)
             {
                 context.Scores.Add(s);
             }

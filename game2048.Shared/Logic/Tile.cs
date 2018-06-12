@@ -45,7 +45,7 @@ namespace _2048.MVC.Model
         }
         public override string ToString()
         {
-            if (Value == 0) return "0";
+            if (Value == 0) return "";
             return Math.Pow(2, Value).ToString();
         }
     }
