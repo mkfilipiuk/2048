@@ -9,7 +9,7 @@ using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Net.Mime;
 using System.Configuration;
-
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace game2048.Server
 {
@@ -20,8 +20,9 @@ namespace game2048.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.TryAddSingleton<IResponseCompressionProvider, ResponseCompressionProvider>();
             services.AddDbContext<Context>(options =>
-            options.UseSqlServer(System.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer("(LocalDB)\\MSSQLLocalDB"));//System.Configuration.GetConnectionString("DefaultConnection")));
             services.AddResponseCompression(options =>
             {
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]

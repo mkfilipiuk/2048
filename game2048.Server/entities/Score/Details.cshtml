@@ -1,0 +1,37 @@
+@page
+@model game2048.Server.entities.Score.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Score</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Score.Nickname)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Score.Nickname)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Score.TypeOfScorer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Score.TypeOfScorer)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Score.Points)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Score.Points)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Score.ID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
