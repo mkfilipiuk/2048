@@ -21,6 +21,7 @@ namespace game2048.Server
                 {
                     var context = services.GetRequiredService<Context>();
                     DbInitializer.Initialize(context);
+                    Console.WriteLine("Puklo");
                 }
                 catch (Exception ex)
                 {

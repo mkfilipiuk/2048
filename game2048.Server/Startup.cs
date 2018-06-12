@@ -61,8 +61,6 @@ namespace game2048.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            var dbContext = app.ApplicationServices.GetRequiredService<Context>();
-            DbInitializer.Initialize(dbContext);
 
             app.UseResponseCompression();
 
