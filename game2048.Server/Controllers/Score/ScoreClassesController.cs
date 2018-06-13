@@ -10,7 +10,7 @@ using game2048.Models;
 
 namespace game2048.Server.Controllers.Score
 {
-    [Route("api/[controller]")]
+    [Route("api/ScoreClasses")]
     [ApiController]
     public class ScoreClassesController : ControllerBase
     {

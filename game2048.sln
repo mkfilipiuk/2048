@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "game2048.Server", "game2048.Server\game2048.Server.csproj", "{078A3798-DB7C-4ACE-AFBD-4B9F50D2067F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "game2048.Server", "game2048.Server\game2048.Server.csproj", "{078A3798-DB7C-4ACE-AFBD-4B9F50D2067F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "game2048.Client", "game2048.Client\game2048.Client.csproj", "{00225940-1A25-4587-9567-240B523ED1A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "game2048.Client", "game2048.Client\game2048.Client.csproj", "{00225940-1A25-4587-9567-240B523ED1A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "game2048.Shared", "game2048.Shared\game2048.Shared.csproj", "{FC376A2A-B18E-4F44-B7B7-8AD7936C7A20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "game2048.Shared", "game2048.Shared\game2048.Shared.csproj", "{FC376A2A-B18E-4F44-B7B7-8AD7936C7A20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
