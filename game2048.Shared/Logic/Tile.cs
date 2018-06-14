@@ -24,29 +24,36 @@ namespace _2048.MVC.Model
             return false;
         }
 
-        public void Move(Tile t, int noOfTurn)
+        public int Move(Tile t, int noOfTurn)
         {
-            if (this.Value != 0 && t.Value != 0 && (this.lastMove == noOfTurn || t.lastMove == noOfTurn)) return;
+            if (this.Value != 0 && t.Value != 0 && (this.lastMove == noOfTurn || t.lastMove == noOfTurn)) return 0;
             if (Value == 0)
             {
                 Console.WriteLine("Przesuwamy");
                 this.Value = t.Value;
                 t.Value = 0;
-                return;
+                return 0;
             }
             if (this.Value == t.Value)
             {
-                Console.WriteLine("Mergujemy");
                 lastMove = noOfTurn;
                 t.lastMove = noOfTurn;
                 t.Value = 0;
                 ++Value;
+                Console.WriteLine("Mergujemy {0}", Math.Pow(2, Value));
+                return (int)Math.Pow(2, Value);
             }
+            return 0;
         }
         public override string ToString()
         {
             if (Value == 0) return "";
             return Math.Pow(2, Value).ToString();
+        }
+
+        public Tile(int v)
+        {
+            Value = v;
         }
     }
 }

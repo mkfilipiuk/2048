@@ -3,12 +3,15 @@
 @using Microsoft.AspNetCore.Blazor.Browser.Interop
 @using _2048.MVC.Model
 @using _2048.csfunctions_for_js
+@using game2048.Models
+@using game2048.Client.Controllers
+@using Newtonsoft.Json
+@inject HttpClient Http
 
 <h1>2048</h1>
 <button id="initKeyLogger" onclick="initJS();">Run JS</button>
 <button id="initKeyLogger" onclick=@initKey_f>Start Game</button>
-
-
+<button id="initKeyLogger" onclick=@StartRandom>Start Game2</button>
 <div id="grid">
     @if (g.isFinished == false)
     {
@@ -39,33 +42,100 @@
     }
     else
     {
-        <p>Gra się skończyła</p>
+        <p>It's over :(</p>
+        <br />
+        <p> Your score: @g.Score</p>
     }
 </div>
-
+@if (g.isFinished == true)
+{
+    <h3>Send your score!</h3>
+    <input bind=@nickname type="text" />
+    <button onclick=@SendScore>Send!</button>
+}
 
 @functions {
 
-Grid g;
 
-protected override void OnInit()
-{
-    InitPage();
+    string nickname;
+    Grid g;
+
+    protected override void OnInit()
+    {
+        InitPage();
+    }
+
+    private void InitPage()
+    {
+        g = new Grid();
+        g.InitGame();
+        ArrowsHandler.grid = g;
+        ArrowsHandler.action = StateHasChanged;
+    }
+
+
+    private void initKey_f()
+    {
+        RegisteredFunction.Invoke<bool>("initkey");
+    }
+
+    private async void SendScore()
+    {
+        if (!string.IsNullOrEmpty(nickname))
+        {
+            await Http.SendJsonAsync(HttpMethod.Post, "api/ScoreClasses", new ScoreClass
+            {
+                Nickname = nickname,
+                TypeOfScorer = "Human",
+                Points = g.Score
+            });
+
+            nickname = "";
+            InitPage();
+            StateHasChanged();
+        }
+
+
+    }
+
+    private async Task StartRandom()
+    {
+        while (!g.isFinished)
+        {
+            var lj = g.Json();
+
+            //GridWrapper l = await Http.SendJsonAsync<GridWrapper>(HttpMethod.Post, "api/ais/random", 1);
+            var a = await Http.PostJsonAsync<GridWrapper>("/api/ais/random", new GridWrapper(lj));
+            Console.WriteLine("jest super, odebraliśmy coś o rozmiarze {0}", a);
+            Console.WriteLine(a.Grid);
+            //Console.WriteLine(JsonConvert.DeserializeObject<List<int>>(a.Grid));
+            g = new Grid(a.Grid);
+            StateHasChanged();
+        }
+        await Http.SendJsonAsync(HttpMethod.Post, "api/ScoreClasses", new ScoreClass
+        {
+            Nickname = "random",
+            TypeOfScorer = "AI",
+            Points = g.Score
+        });
+        g = new Grid();
+        g.InitGame();
+    }
+
+
+    private async Task PlayAI()
+    {
+        if (!string.IsNullOrEmpty(nickname))
+        {
+            await Http.SendJsonAsync(HttpMethod.Post, "api/ScoreClasses", new ScoreClass
+            {
+                Nickname = nickname,
+            });
+
+            nickname = "";
+            //await Refresh();
+        }
+    }
+
+
 }
-
-private void InitPage()
-{
-    g = new Grid();
-    g.InitGame();
-    ArrowsHandler.grid = g;
-    ArrowsHandler.action = StateHasChanged;
-}
-
-
-private void initKey_f()
-{
-    RegisteredFunction.Invoke<bool>("initkey");
-}
-
-
-} 

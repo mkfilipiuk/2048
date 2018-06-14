@@ -25,6 +25,7 @@ namespace game2048.Server.Controllers.Score
         [HttpGet]
         public IEnumerable<ScoreClass> GetScores()
         {
+            Console.WriteLine("W środku");
             return _context.Scores;
         }
 
@@ -84,7 +85,7 @@ namespace game2048.Server.Controllers.Score
 
         // POST: api/ScoreClasses
         [HttpPost]
-        public async Task<IActionResult> PostScoreClass([FromBody] ScoreClass scoreClass)
+        public async Task<ActionResult<ScoreClass>> PostScoreClass([FromBody] ScoreClass scoreClass)
         {
             if (!ModelState.IsValid)
             {

@@ -13,7 +13,14 @@ namespace _2048.MVC.Model
 
     public class Grid
     {
-        public bool isFinished { internal set; get; }
+        public bool isFinished
+        {
+            get
+            {
+                return !IsMovePossible(Direction.DOWN) && !IsMovePossible(Direction.LEFT) && !IsMovePossible(Direction.RIGHT) && !IsMovePossible(Direction.UP);
+            }
+        }
+        public int Score { set; get; }
         private int noOfTurn;
         private const int size = 4;
         private int numberOfEmpty
@@ -31,7 +38,7 @@ namespace _2048.MVC.Model
                 return counter;
             }
         }
-        private Tile[,] GridOfTiles { get; }
+        public Tile[,] GridOfTiles { get; internal set; }
         private Random rnd;
 
         private void InitializeGrid()
@@ -104,8 +111,8 @@ namespace _2048.MVC.Model
                     {
                         for (int k = size - 2; k >= 0; --k)
                         {
-                            Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", k + 1, j, k, j);
-                            GridOfTiles[k + 1, j].Move(GridOfTiles[k, j], noOfTurn);
+                            //Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", k + 1, j, k, j);
+                            Score += GridOfTiles[k + 1, j].Move(GridOfTiles[k, j], noOfTurn);
                         }
                     }
                 }
@@ -118,8 +125,8 @@ namespace _2048.MVC.Model
                     {
                         for (int k = 0; k < size - 1; ++k)
                         {
-                            Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", k, j, k + 1, j);
-                            GridOfTiles[k, j].Move(GridOfTiles[k + 1, j], noOfTurn);
+                            //Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", k, j, k + 1, j);
+                            Score += GridOfTiles[k, j].Move(GridOfTiles[k + 1, j], noOfTurn);
                         }
                     }
                 }
@@ -132,8 +139,8 @@ namespace _2048.MVC.Model
                     {
                         for (int k = 0; k < size - 1; ++k)
                         {
-                            Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", i, k, i, k + 1);
-                            GridOfTiles[i, k].Move(GridOfTiles[i, k + 1], noOfTurn);
+                            //Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", i, k, i, k + 1);
+                            Score += GridOfTiles[i, k].Move(GridOfTiles[i, k + 1], noOfTurn);
                         }
                     }
                 }
@@ -146,8 +153,10 @@ namespace _2048.MVC.Model
                     {
                         for (int k = size - 2; k >= 0; --k)
                         {
-                            Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", i, k + 1, i, k);
-                            GridOfTiles[i, k + 1].Move(GridOfTiles[i, k], noOfTurn);
+                            //Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", i, k + 1, i, k);
+                            int s = Score;
+                            Score += GridOfTiles[i, k + 1].Move(GridOfTiles[i, k], noOfTurn);
+                            if (s < Score) Console.WriteLine("Dodajemy {0} punktów", Score - s);
                         }
                     }
                 }
@@ -168,12 +177,14 @@ namespace _2048.MVC.Model
             InitializeGrid();
             rnd = new Random();
             noOfTurn = 0;
+            Score = 0;
         }
 
         public void RandomTile()
         {
             int nBefore = numberOfEmpty;
             if (numberOfEmpty == 0) return;
+            if (rnd == null) rnd = new Random();
             int r = rnd.Next(numberOfEmpty);
             int counter = 0;
             for (int i = 0; i < size; ++i)
@@ -204,6 +215,8 @@ namespace _2048.MVC.Model
         {
             Console.WriteLine("Numer tury: {0}", noOfTurn);
             Console.WriteLine("Liczba pustych: {0}", numberOfEmpty);
+            Console.WriteLine("Wynik: {0}", Score);
+
             for (int i = 0; i < size; ++i)
             {
                 for (int j = 0; j < size; ++j)
@@ -216,7 +229,35 @@ namespace _2048.MVC.Model
 
         public void Close()
         {
-            isFinished = true;
+            //isFinished = true;
         }
+
+        public List<int> Json()
+        {
+            List<int> l = new List<int>();
+            l.Add(Score);
+            for(int i = 0; i < 4; ++i)
+            {
+                for(int j = 0; j < 4; ++j)
+                {
+                    l.Add(GridOfTiles[i, j].Value);
+                }
+            }
+            return l;
+        }
+
+        public Grid(List<int> grid)
+        {
+            GridOfTiles = new Tile[4, 4];
+            Score = grid[0];
+            for(int i = 0; i < size; ++i)
+            {
+                for (int j = 0; j < size; ++j)
+                    GridOfTiles[i,j] = new Tile(grid[size * i + j + 1]);
+            }
+
+        }
+
+
     }
 }

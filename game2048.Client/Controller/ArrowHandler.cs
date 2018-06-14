@@ -40,7 +40,7 @@ namespace _2048.csfunctions_for_js
                 result = grid.Move(Direction.RIGHT);
             }
             grid.Print();
-            if (!result) grid.Close();
+            //if (!result) grid.Close();
             action();
         }
     }

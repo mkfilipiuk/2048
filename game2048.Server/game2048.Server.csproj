@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\SampleDataController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="app.config" />
   </ItemGroup>
 
