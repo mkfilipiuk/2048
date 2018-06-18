@@ -10,13 +10,14 @@ using _2048.MVC.Model;
 using game2048.Client.Controllers;
 using Newtonsoft.Json;
 
+
 namespace game2048.Server.Controllers.AI
 {
     [Route("api/ais")]
     [ApiController]
     public class AIController : ControllerBase
     {
-        Dictionary<string,IAI> ais = new Dictionary<string,IAI> { { new RandomAI().ToString(), new RandomAI()} };
+        Dictionary<string, IAI> ais = new Dictionary<string, IAI> { { new RandomAI().ToString(), new RandomAI() }, { new MonteCarloRonenz().ToString() , new MonteCarloRonenz() } };
 
         // GET: api/AI
         [HttpGet]
@@ -36,8 +37,9 @@ namespace game2048.Server.Controllers.AI
             Console.WriteLine(name);
             Console.WriteLine(l.Capacity);
             if (!ais.ContainsKey(name)) return BadRequest(ModelState);
-
-            return CreatedAtAction("Grid", new { id = 2137 }, new GridWrapper(ais[name].Move(new Grid(l)).Json()));// JsonConvert.SerializeObject(ais[name].Move(new Grid(l)).Json())); //JsonConvert.SerializeObject( ais[name].Move(new Grid(l)).Json()));
+            var r = new GridWrapper(ais[name].Move(new Grid(l)).Json());
+            Console.WriteLine("Wysyłamy odpowiedź");
+            return CreatedAtAction("Grid", new { id = 2137 }, r);// JsonConvert.SerializeObject(ais[name].Move(new Grid(l)).Json())); //JsonConvert.SerializeObject( ais[name].Move(new Grid(l)).Json()));
         }
 
     }

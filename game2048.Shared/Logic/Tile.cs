@@ -29,7 +29,6 @@ namespace _2048.MVC.Model
             if (this.Value != 0 && t.Value != 0 && (this.lastMove == noOfTurn || t.lastMove == noOfTurn)) return 0;
             if (Value == 0)
             {
-                Console.WriteLine("Przesuwamy");
                 this.Value = t.Value;
                 t.Value = 0;
                 return 0;
@@ -40,7 +39,6 @@ namespace _2048.MVC.Model
                 t.lastMove = noOfTurn;
                 t.Value = 0;
                 ++Value;
-                Console.WriteLine("Mergujemy {0}", Math.Pow(2, Value));
                 return (int)Math.Pow(2, Value);
             }
             return 0;

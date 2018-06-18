@@ -71,9 +71,7 @@ namespace _2048.MVC.Model
                 {
                     for (int j = 0; j < size; ++j)
                     {
-                        //Console.WriteLine("Testujemy ({0},{1})->{2} na które wchodzi ({3},{4})->{5}",i+1,j, GridOfTiles[i+1, j],i, j,GridOfTiles[i, j]); 
                         result = GridOfTiles[i + 1, j].IsLegal(GridOfTiles[i, j]) || result;
-                        //Console.WriteLine("Result: {0}", result);
                     }
                 }
             }
@@ -111,7 +109,6 @@ namespace _2048.MVC.Model
                     {
                         for (int k = size - 2; k >= 0; --k)
                         {
-                            //Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", k + 1, j, k, j);
                             Score += GridOfTiles[k + 1, j].Move(GridOfTiles[k, j], noOfTurn);
                         }
                     }
@@ -125,7 +122,6 @@ namespace _2048.MVC.Model
                     {
                         for (int k = 0; k < size - 1; ++k)
                         {
-                            //Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", k, j, k + 1, j);
                             Score += GridOfTiles[k, j].Move(GridOfTiles[k + 1, j], noOfTurn);
                         }
                     }
@@ -139,7 +135,6 @@ namespace _2048.MVC.Model
                     {
                         for (int k = 0; k < size - 1; ++k)
                         {
-                            //Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", i, k, i, k + 1);
                             Score += GridOfTiles[i, k].Move(GridOfTiles[i, k + 1], noOfTurn);
                         }
                     }
@@ -153,10 +148,8 @@ namespace _2048.MVC.Model
                     {
                         for (int k = size - 2; k >= 0; --k)
                         {
-                            //Console.WriteLine("Będziemy łączyć ({0},{1}) z ({2},{3})", i, k + 1, i, k);
                             int s = Score;
                             Score += GridOfTiles[i, k + 1].Move(GridOfTiles[i, k], noOfTurn);
-                            if (s < Score) Console.WriteLine("Dodajemy {0} punktów", Score - s);
                         }
                     }
                 }
@@ -195,14 +188,12 @@ namespace _2048.MVC.Model
                     {
                         if (counter == r)
                         {
-                            Console.WriteLine("Wstawiamy na ({0},{1})", i, j);
-                            GridOfTiles[i, j].Value = rnd.Next(2) + 1;
+                            GridOfTiles[i, j].Value = (rnd.Next(10) == 0) ? 4 : 2;
                         }
                         counter++;
                     }
                 }
             }
-            if (nBefore == numberOfEmpty) Console.WriteLine("Zepsute");
         }
 
         public void InitGame()
@@ -236,9 +227,9 @@ namespace _2048.MVC.Model
         {
             List<int> l = new List<int>();
             l.Add(Score);
-            for(int i = 0; i < 4; ++i)
+            for (int i = 0; i < 4; ++i)
             {
-                for(int j = 0; j < 4; ++j)
+                for (int j = 0; j < 4; ++j)
                 {
                     l.Add(GridOfTiles[i, j].Value);
                 }
@@ -250,10 +241,10 @@ namespace _2048.MVC.Model
         {
             GridOfTiles = new Tile[4, 4];
             Score = grid[0];
-            for(int i = 0; i < size; ++i)
+            for (int i = 0; i < size; ++i)
             {
                 for (int j = 0; j < size; ++j)
-                    GridOfTiles[i,j] = new Tile(grid[size * i + j + 1]);
+                    GridOfTiles[i, j] = new Tile(grid[size * i + j + 1]);
             }
 
         }

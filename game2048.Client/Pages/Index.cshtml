@@ -6,7 +6,7 @@
 @using game2048.Models
 @using game2048.Client.Controllers
 @using Newtonsoft.Json
-@inject HttpClient Http
+@inject HttpClient Http 
 
 <h1>2048</h1>
 <button id="initKeyLogger" onclick="initJS();">Run JS</button>
@@ -59,6 +59,7 @@
 
     string nickname;
     Grid g;
+    bool breakExecution;
 
     protected override void OnInit()
     {
@@ -100,12 +101,12 @@
 
     private async Task StartRandom()
     {
-        while (!g.isFinished)
+        while (!g.isFinished && !breakExecution)
         {
             var lj = g.Json();
 
             //GridWrapper l = await Http.SendJsonAsync<GridWrapper>(HttpMethod.Post, "api/ais/random", 1);
-            var a = await Http.PostJsonAsync<GridWrapper>("/api/ais/random", new GridWrapper(lj));
+            var a = await Http.PostJsonAsync<GridWrapper>("/api/ais/Monte_Carlo_Ronenz", new GridWrapper(lj));
             Console.WriteLine("jest super, odebraliśmy coś o rozmiarze {0}", a);
             Console.WriteLine(a.Grid);
             //Console.WriteLine(JsonConvert.DeserializeObject<List<int>>(a.Grid));
