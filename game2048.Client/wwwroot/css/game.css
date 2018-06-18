@@ -21,6 +21,13 @@ span {
     width: 500px;
     height: 500px;
     background-color: limegreen;
+    float: left;
+}
+
+#AImenu{
+    margin-left: 100px;
+    width: 300px;
+    float: left;
 }
 
 .row {

@@ -19,7 +19,6 @@ namespace game2048.Server.Controllers.AI
     {
         Dictionary<string, IAI> ais = new Dictionary<string, IAI> { { new RandomAI().ToString(), new RandomAI() }, { new MonteCarloRonenz().ToString() , new MonteCarloRonenz() } };
 
-        // GET: api/AI
         [HttpGet]
         public IEnumerable<string> GetAIs()
         {

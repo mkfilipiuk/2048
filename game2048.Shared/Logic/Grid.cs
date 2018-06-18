@@ -188,7 +188,7 @@ namespace _2048.MVC.Model
                     {
                         if (counter == r)
                         {
-                            GridOfTiles[i, j].Value = (rnd.Next(10) == 0) ? 4 : 2;
+                            GridOfTiles[i, j].Value = (rnd.Next(10) == 0) ? 2 : 1;
                         }
                         counter++;
                     }

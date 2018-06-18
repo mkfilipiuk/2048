@@ -37,14 +37,12 @@
                     Blazor.platform.callMethod(DealArrow, null, [
                         arg1AsDotNetString
                     ]);
-                    console.log(e);
                     return true;
                 };
             };
-            Blazor.registerFunction('initkey', initkey);
+            initkey();
+            //Blazor.registerFunction('initkey', initkey);
         }
-
-        console.log("LOL");
     </script>
     <!--HighScores view-->
     <script>
