@@ -66,9 +66,8 @@
         <button id="initKeyLogger" onclick="initJS();">Play with arrows</button>
         <button id="startAI" onclick=@StartAI>Start AI</button>
     }
-    <br />
     @if (isAI)
-    {<button id="breakAI" onclick=@BreakAI>Pause</button>}
+    {<button id="breakAI" onclick=@BreakAI>Stop</button>}
 </div>
 
 @if (g.isFinished == true && !isAI)
@@ -82,12 +81,12 @@
 
 
 @functions {
-        string selectedAI;
-        string[] listOfAIs = null;
-        string nickname;
-        Grid g;
-        bool breakExecution = false;
-        bool isAI = false;
+    string selectedAI;
+    string[] listOfAIs = null;
+    string nickname;
+    Grid g;
+    bool breakExecution = false;
+    bool isAI = false;
     protected override void OnInit()
     {
         InitPage();
@@ -112,6 +111,7 @@
     {
         RegisteredFunction.Invoke<bool>("initJS");
         RegisteredFunction.Invoke<bool>("initkey");
+        InitPage();
 
     }
 
@@ -138,36 +138,14 @@
     {
         breakExecution = true;
         isAI = false;
+        InitPage();
     }
 
-    private async Task StartRandom()
-    {
-        while (!g.isFinished && !breakExecution)
-        {
-            var lj = g.Json();
-
-            //GridWrapper l = await Http.SendJsonAsync<GridWrapper>(HttpMethod.Post, "api/ais/random", 1);
-            var a = await Http.PostJsonAsync<GridWrapper>("/api/ais/Monte_Carlo_Ronenz", new GridWrapper(lj));
-            Console.WriteLine("jest super, odebraliśmy coś o rozmiarze {0}", a);
-            Console.WriteLine(a.Grid);
-            //Console.WriteLine(JsonConvert.DeserializeObject<List<int>>(a.Grid));
-            g = new Grid(a.Grid);
-            StateHasChanged();
-        }
-        if (breakExecution) return;
-        await Http.SendJsonAsync(HttpMethod.Post, "api/ScoreClasses", new ScoreClass
-        {
-            Nickname = "random",
-            TypeOfScorer = "AI",
-            Points = g.Score
-        });
-        g = new Grid();
-        g.InitGame();
-    }
-
+    
     private async Task StartAI()
     {
         isAI = true;
+        InitPage();
         while (!g.isFinished && !breakExecution)
         {
             var lj = g.Json();
@@ -175,7 +153,7 @@
             g = new Grid(a.Grid);
             StateHasChanged();
         }
-        if (breakExecution) { breakExecution = false; return; }
+        if (breakExecution) { breakExecution = false; InitPage(); return; }
         await Http.SendJsonAsync(HttpMethod.Post, "api/ScoreClasses", new ScoreClass
         {
             Nickname = selectedAI,
@@ -187,21 +165,4 @@
         g = new Grid();
         g.InitGame();
     }
-
-
-    private async Task PlayAI()
-    {
-        if (!string.IsNullOrEmpty(nickname))
-        {
-            await Http.SendJsonAsync(HttpMethod.Post, "api/ScoreClasses", new ScoreClass
-            {
-                Nickname = nickname,
-            });
-
-            nickname = "";
-            //await Refresh();
-        }
-    }
-
-
 }

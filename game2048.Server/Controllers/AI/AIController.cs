@@ -17,7 +17,7 @@ namespace game2048.Server.Controllers.AI
     [ApiController]
     public class AIController : ControllerBase
     {
-        Dictionary<string, IAI> ais = new Dictionary<string, IAI> { { new RandomAI().ToString(), new RandomAI() }, { new MonteCarloRonenz().ToString() , new MonteCarloRonenz() } };
+        Dictionary<string, IAI> ais = new Dictionary<string, IAI> { { new RandomAI().ToString(), new RandomAI() }, { new MonteCarloRonenz(1).ToString(), new MonteCarloRonenz(1) }, { new MonteCarloRonenz(10).ToString(), new MonteCarloRonenz(10) }, { new MonteCarloRonenz(20).ToString(), new MonteCarloRonenz(20) }, { new MonteCarloRonenz(50).ToString(), new MonteCarloRonenz(50) }, { new MonteCarloRonenz(100).ToString() , new MonteCarloRonenz(100) } };
 
         [HttpGet]
         public IEnumerable<string> GetAIs()
@@ -38,7 +38,7 @@ namespace game2048.Server.Controllers.AI
             if (!ais.ContainsKey(name)) return BadRequest(ModelState);
             var r = new GridWrapper(ais[name].Move(new Grid(l)).Json());
             Console.WriteLine("Wysyłamy odpowiedź");
-            return CreatedAtAction("Grid", new { id = 2137 }, r);// JsonConvert.SerializeObject(ais[name].Move(new Grid(l)).Json())); //JsonConvert.SerializeObject( ais[name].Move(new Grid(l)).Json()));
+            return CreatedAtAction("Grid", new { id = 1 }, r);
         }
 
     }

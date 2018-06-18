@@ -8,9 +8,7 @@
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="css/site.css" rel="stylesheet" />
     <link href="css/game.css" rel="stylesheet" />
-    <link href="../Javascript/test.js" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
     <app>Loading...</app>
@@ -30,7 +28,7 @@
                 typeName,
                 methodName
             );
-
+            console.log("jESTEŚMY")
             initkey = function () {
                 document.onkeydown = function (e) {
                     e = e || window.event;
@@ -42,34 +40,11 @@
                     ]);
                     return true;
                 };
+                console.log("DODANE")
             };
             initkey();
-            //Blazor.registerFunction('initkey', initkey);
         }
     </script>
-    <!--HighScores view-->
-    <!--<script>
-        Blazor.registerFunction('ShowControl', (id, item, bShow) => {
-            if (bShow) {
-                var txtInput = document.getElementById("txt_" + id);
-                document.getElementById("spn_" + id).style.display = "none";
-                txtInput.style.display = "";
-                txtInput.value = item;
-                txtInput.focus();
-                document.getElementById("btnEdit_" + id).style.display = "none";
-                document.getElementById("btnUpdate_" + id).style.display = "";
-                document.getElementById("btnCancel_" + id).style.display = "";
-            }
-            else {
-                document.getElementById("spn_" + id).style.display = "";
-                document.getElementById("txt_" + id).style.display = "none";
-                document.getElementById("btnEdit_" + id).style.display = "";
-                document.getElementById("btnUpdate_" + id).style.display = "none";
-                document.getElementById("btnCancel_" + id).style.display = "none";
-            }
-            return true;
-        });
-    </script>-->
 
     <!--Statistics-->
     <script type="text/javascript">

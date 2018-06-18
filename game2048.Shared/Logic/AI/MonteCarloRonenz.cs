@@ -27,10 +27,11 @@ namespace game2048.Shared.Logic.AI
 
         private Random r;
 
-        public const int NumberOfRepetitions = 100;
+        public readonly int NumberOfRepetitions;
 
-        public MonteCarloRonenz()
+        public MonteCarloRonenz(int number)
         {
+            NumberOfRepetitions = number;
             r = new Random();
         }
 
@@ -46,22 +47,12 @@ namespace game2048.Shared.Logic.AI
             {
                 foreach (var t in directions)
                 {
-                    //var thread = new Thread(new ParameterizedThreadStart(myMethod));
-                    //thread.Start(new Grid(grid.Json()));
-                    //thread.Join();
                     Pair<int,Grid>[] results = new Pair<int,Grid>[NumberOfRepetitions];
                     for(int i = 0; i < NumberOfRepetitions; ++i)
                     {
                         results[i] = new Pair<int,Grid>(0,new Grid(grid.Json()));
                     }
-
                     t.Item2 = results.AsParallel().Select<Pair<int, Grid>, int>(r => { r.Item2.Move(t.Item1);  return MakeRun(r.Item2); }).AsParallel().Sum();
-                    //for (int i = 0; i < NumberOfRepetitions; ++i)
-                    //{
-                    //    var g = new Grid(grid.Json());
-                    //    g.Move(t.Item1);
-                    //    t.Item2 += MakeRun(g);
-                    //}
                 }
                 grid.Move(MaxMove(directions));
             }
@@ -103,7 +94,7 @@ namespace game2048.Shared.Logic.AI
 
         public override string ToString()
         {
-            return "Monte_Carlo_Ronenz";
+            return "Monte_Carlo_Ronenz_" + NumberOfRepetitions.ToString();
         }
     }
 }
