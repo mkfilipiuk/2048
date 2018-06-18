@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using _2048.MVC.Model;
@@ -35,30 +36,45 @@ namespace game2048.Shared.Logic.AI
 
         public Grid Move(Grid grid)
         {
-            List<Pair < Direction,ulong>> directions = new List<Pair<Direction, ulong>>();
-            foreach(Direction d in Enum.GetValues(typeof(Direction)))
+            List<Pair < Direction, int>> directions = new List<Pair<Direction, int>>();
+
+            foreach (Direction d in Enum.GetValues(typeof(Direction)))
             {
-                if (grid.IsMovePossible(d)) directions.Add(new Pair<Direction,ulong>(d, 0));
+                if (grid.IsMovePossible(d)) directions.Add(new Pair<Direction,int>(d, 0));
             }
-            foreach(var t in directions)
+            if (directions.Count != 1)
             {
-                //var thread = new Thread(new ParameterizedThreadStart(myMethod));
-                //thread.Start(new Grid(grid.Json()));
-                //thread.Join();
-                for (int i = 0; i < NumberOfRepetitions; ++i)
+                foreach (var t in directions)
                 {
-                    var g = new Grid(grid.Json());
-                    g.Move(t.Item1);
-                    t.Item2 += MakeRun(g);
+                    //var thread = new Thread(new ParameterizedThreadStart(myMethod));
+                    //thread.Start(new Grid(grid.Json()));
+                    //thread.Join();
+                    Pair<int,Grid>[] results = new Pair<int,Grid>[NumberOfRepetitions];
+                    for(int i = 0; i < NumberOfRepetitions; ++i)
+                    {
+                        results[i] = new Pair<int,Grid>(0,new Grid(grid.Json()));
+                    }
+
+                    t.Item2 = results.AsParallel().Select<Pair<int, Grid>, int>(r => { r.Item2.Move(t.Item1);  return MakeRun(r.Item2); }).AsParallel().Sum();
+                    //for (int i = 0; i < NumberOfRepetitions; ++i)
+                    //{
+                    //    var g = new Grid(grid.Json());
+                    //    g.Move(t.Item1);
+                    //    t.Item2 += MakeRun(g);
+                    //}
                 }
+                grid.Move(MaxMove(directions));
             }
-            grid.Move(MaxMove(directions));
+            else
+            {
+                grid.Move(directions[0].Item1);
+            }
             return grid;
         }
 
-        private Direction MaxMove(List<Pair<Direction, ulong>> directions)
+        private Direction MaxMove(List<Pair<Direction, int>> directions)
         {
-            ulong max = 0;
+            int max = 0;
             List<Direction> l = new List<Direction>();
             foreach(var d in directions)
             {
@@ -71,7 +87,7 @@ namespace game2048.Shared.Logic.AI
             return l[r.Next(l.Count)];
         }
 
-        private ulong MakeRun(Grid grid)
+        private int MakeRun(Grid grid)
         {
             while(!grid.isFinished)
             {
@@ -82,7 +98,7 @@ namespace game2048.Shared.Logic.AI
                 }
                 grid.Move(directions[r.Next(directions.Count)]);
             }
-            return (ulong)grid.Score;
+            return grid.Score;
         }
 
         public override string ToString()

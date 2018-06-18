@@ -61,30 +61,33 @@
         </select>
     }
     <br />
-    <button id="initKeyLogger" onclick="initJS();">Play with arrows</button>
-    <button id="initKeyLogger" onclick=@StartAI>Start AI</button>
+    @if (!isAI)
+    {
+        <button id="initKeyLogger" onclick="initJS();">Play with arrows</button>
+        <button id="startAI" onclick=@StartAI>Start AI</button>
+    }
     <br />
+    @if (isAI)
+    {<button id="breakAI" onclick=@BreakAI>Pause</button>}
 </div>
 
 @if (g.isFinished == true && !isAI)
 {
     <h3>Send your score!</h3>
-    <form>
-        <input bind=@nickname type="text" />
-        <button onclick=@SendScore>Send!</button>
-    </form>
+    <input bind=@nickname type="text" />
+    <button onclick=@SendScore>Send!</button>
 }
 
 
 
 
 @functions {
-    string selectedAI;
-    string[] listOfAIs = null;
-    string nickname;
-    Grid g;
-    bool breakExecution = false;
-    bool isAI = false;
+        string selectedAI;
+        string[] listOfAIs = null;
+        string nickname;
+        Grid g;
+        bool breakExecution = false;
+        bool isAI = false;
     protected override void OnInit()
     {
         InitPage();
@@ -131,6 +134,12 @@
 
     }
 
+    private void BreakAI()
+    {
+        breakExecution = true;
+        isAI = false;
+    }
+
     private async Task StartRandom()
     {
         while (!g.isFinished && !breakExecution)
@@ -145,6 +154,7 @@
             g = new Grid(a.Grid);
             StateHasChanged();
         }
+        if (breakExecution) return;
         await Http.SendJsonAsync(HttpMethod.Post, "api/ScoreClasses", new ScoreClass
         {
             Nickname = "random",
@@ -165,6 +175,7 @@
             g = new Grid(a.Grid);
             StateHasChanged();
         }
+        if (breakExecution) { breakExecution = false; return; }
         await Http.SendJsonAsync(HttpMethod.Post, "api/ScoreClasses", new ScoreClass
         {
             Nickname = selectedAI,

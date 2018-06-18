@@ -2,118 +2,33 @@
 @using game2048.Shared
 @using game2048.Models
 @using Microsoft.AspNetCore.Blazor.Browser.Interop
+@using PLplot
 @inject HttpClient Http
 
-<h1>Highscores List</h1>
+<h1>Histogram of scores</h1>
+<button onclick="registerFunctions();">Register JS to Blazor</button>
+<button onclick=@drawChart>Draw chart</button>
 <br /><br />
-@if (scores == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    @if (scores.Count > 0)
+
+<canvas id="chart"></canvas>
+
+@functions
+{ 
+
+    private async void drawChart()
     {
-        <table class='table table-striped table-bordered table-hover table-condensed' style="width:80%;">
-            <thead>
-                <tr>
-                    <th style="width: 40%">Nickname</th>
-                    <th style="width: 40%">Type of scorer</th>
-                    <th style="width: 20%">Points</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var score in scores)
-                {
-                    <tr>
-                        <td>
-                            <span id="spn_nickname_@score.ID">@score.Nickname</span>
-                        </td>
-                        <td>
-                            <span id="spn_type_@score.ID">@score.TypeOfScorer</span>
-                        </td>
-                        <td>
-                            <span id="spn_score_@score.ID">@score.Points</span>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-}
-
-
-@functions {
-string nickname;
-string UpdateNickname;
-
-IList<ScoreClass> scores = new List<ScoreClass>();
-
-protected override async Task OnInitAsync()
-{
-    await Refresh();
-}
-
-private async Task Refresh()
-{
-    scores = await Http.GetJsonAsync<ScoreClass[]>("/api/ScoreClasses");
-    StateHasChanged();
-}
-
-private async Task AddToDo()
-{
-    if (!string.IsNullOrEmpty(nickname))
-    {
-        await Http.SendJsonAsync(HttpMethod.Post, "api/ScoreClasses", new ScoreClass
+        var scores = await Http.GetJsonAsync<ScoreClass[]>("/api/ScoreClasses");
+        int min, max;
+        min = scores.Min(s => s.Points);
+        max = scores.Max(s => s.Points);
+        int count = scores.Count();
+        double p = (max - min) / 10;
+        double[] buckets = new double[10];
+        foreach(var s in scores)
         {
-            Nickname = nickname,
-        });
-
-        nickname = "";
-        await Refresh();
+            buckets[(int)((s.Points - min) / p) == 10 ? 9 : (int)((s.Points - min) / p)]++;
+        }
+        buckets = buckets.Select(b => b / count*100).ToArray();
+        RegisteredFunction.Invoke<bool>("newChart",buckets);
     }
-}
-
-private async Task UpdateToDo(int id)
-{
-    if (!string.IsNullOrEmpty(UpdateNickname))
-    {
-        await Http.SendJsonAsync(HttpMethod.Put, $"/api/ScoreClasses/{id}", new ScoreClass
-        {
-            ID = id,
-            Nickname = UpdateNickname,
-        });
-
-        await Refresh();
-        //UpdateItemName = "";
-
-        RegisteredFunction.Invoke<bool>("ShowControl", id.ToString(), "", false);
-    }
-}
-
-private async Task DeleteToDo(int id)
-{
-    await Http.DeleteAsync($"/api/ScoreClasses/{id}");
-    await Refresh();
-}
-
-private void EditToDo(int id, string itemName)
-{
-    RegisteredFunction.Invoke<bool>("ShowControl", id.ToString(), itemName, true);
-}
-
-private void CancelToDo(int id)
-{
-    RegisteredFunction.Invoke<bool>("ShowControl", id.ToString(), "", false);
-}
-
-private async Task DeleteAllToDos()
-{
-    foreach (var c in scores)
-    {
-        await Http.DeleteAsync($"/api/ScoreClasses/{c.ID}");
-    }
-
-    await Refresh();
-}
 }
